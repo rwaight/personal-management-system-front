@@ -96,6 +96,12 @@ export default {
      *              while "edit" has files and other things. We want to be able to add more things to newly created issue.
      */
     onAddNewModalClose(data): void {
+      // the modal has been closed without submitting any data in it
+      if (!data) {
+        this.isAddNewModalVisible = false
+        return;
+      }
+
       this.isAddNewModalVisible = false
       if (!data.id) {
         throw new BaseError("Illness id is missing in the data object");
