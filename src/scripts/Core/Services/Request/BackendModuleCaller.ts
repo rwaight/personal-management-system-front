@@ -16,7 +16,6 @@ import BaseError                          from "@/scripts/Core/Error/BaseError";
 export class BackendModuleCaller {
 
     private static readonly KEY_ALL_RECORDS = 'allRecords';
-    private static readonly KEY_SINGLE_RECORD = 'singleRecord';
     private static readonly KEY_IS_LOCKED = 'isLocked';
 
     /**
@@ -94,9 +93,9 @@ export class BackendModuleCaller {
             throw error;
         });
 
-        let singleRecord = response.data[BackendModuleCaller.KEY_SINGLE_RECORD];
+        let singleRecord = response.data[BaseApiResponse.FIELD_SINGLE_RECORD];
         if (undefined === singleRecord) {
-            throw new BaseError(`Called 'get', but the expected key is not present in response. Expected: ${BackendModuleCaller.KEY_SINGLE_RECORD}`);
+            throw new BaseError(`Called 'get', but the expected key is not present in response. Expected: ${BaseApiResponse.FIELD_SINGLE_RECORD}`);
         }
 
         return singleRecord;

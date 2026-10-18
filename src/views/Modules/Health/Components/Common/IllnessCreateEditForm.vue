@@ -80,7 +80,6 @@ export default {
   },
   emits: [
     'submit',
-    'closeModal',
   ],
   components: {
     FormTextArea,
@@ -109,8 +108,8 @@ export default {
       }
 
       IllnessStore().getAll();
-      if (!this.id && response.success) {
-        this.$emit("closeModal", {id: response.id});
+      if (response.success) {
+        this.$emit("submit", {singleRecord: response.singleRecord});
       }
     }
   },

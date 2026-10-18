@@ -6,7 +6,7 @@
                              :initial-information="illness?.information"
                              :initial-name="illness?.name"
                              :appointment-ids="appointmentIds"
-                             @close-modal="$emit('closeModal', $event)"
+                             @submit="$emit('submit', $event)"
       />
     </div>
   </div>
@@ -31,7 +31,7 @@ export default {
     DoctorAppointmentMixin,
   ],
   emits: [
-    'closeModal',
+    'submit',
   ],
   computed: {
     /**

@@ -35,7 +35,7 @@
     />
 
     <ViewEditModal :is-modal-visible="isAddNewModalVisible"
-                   @modal-closed="onAddNewModalClose"
+                   @modal-closed="isAddNewModalVisible = false;"
                    class="relative z-20"
     />
   </teleport>
@@ -54,8 +54,6 @@ import FloatingRoundedPlus from "@/components/Ui/Floating/FloatingRoundedPlus.vu
 
 import {IllnessStore} from "@/scripts/Vue/Store/Module/Health/IllnessStore";
 
-import BaseError                 from "@/scripts/Core/Error/BaseError";
-import PromiseService            from "@/scripts/Core/Services/Promise/PromiseService";
 import PaginationFilterConfigDTO from "@/scripts/Dto/Ui/PaginationResultFilterConfigDTO";
 
 import PaginationMixin from "@/scripts/Vue/Mixins/Ui/PaginationMixin.vue";
@@ -91,35 +89,6 @@ export default {
     PaginationMixin
   ],
   methods: {
-    /**
-     * @description wait for new block to be added and open its edit modal. The "create" modal has only the illness form
-     *              while "edit" has files and other things. We want to be able to add more things to newly created issue.
-     */
-    onAddNewModalClose(data): void {
-      // the modal has been closed without submitting any data in it
-      if (!data) {
-        this.isAddNewModalVisible = false
-        return;
-      }
-
-      this.isAddNewModalVisible = false
-      if (!data.id) {
-        throw new BaseError("Illness id is missing in the data object");
-      }
-
-      let findMatchingBlock= () => {
-        return this.$refs.illnessBlock.find((block)=> block.illness.id === data.id);
-      };
-
-      this.$rootEvent.showFullPageLoader();
-      PromiseService.buildPeriodicallyCheckedPromise(() => {
-        return findMatchingBlock() !== undefined;
-      }).then(() => {
-        this.$rootEvent.hideFullPageLoader();
-        let matchingBlock = findMatchingBlock();
-        matchingBlock.openEditModal();
-      })
-    },
     /**
      * @description refreshes illnesses states when files gets saved
      */

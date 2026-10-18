@@ -86,6 +86,7 @@
                    @confirm-click="$emit('confirmClick', $event)"
                    @update-confirm-click="$emit('updateConfirmClick', $event)"
                    @files-saved="$emit('filesSaved', $event)"
+                   @submit="$emit('submit', $event)"
        />
       </section>
     </div>
@@ -193,7 +194,8 @@ export default {
     'updateConfirmClick',
     'todoUpdateConfirmClick',
     'tabNameClick',
-    'filesSaved'
+    'filesSaved',
+    'submit',
   ],
   methods: {
     /**

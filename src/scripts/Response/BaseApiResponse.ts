@@ -21,6 +21,8 @@ export default class BaseApiResponse {
     static readonly FIELD_NAME_CODE              : string = "code";
     static readonly FIELD_NAME_SUCCESS           : string = "success";
     static readonly FIELD_ID                     : string = "id";
+    static readonly FIELD_SINGLE_RECORD          : string = 'singleRecord';
+
 
     private _code             : number;
     private _message          : string;
@@ -149,6 +151,14 @@ export default class BaseApiResponse {
     get id(): string | null
     {
         return this._data[BaseApiResponse.FIELD_ID] as string | null;
+    }
+
+    /**
+     * @description will return the single record from the data array
+     */
+    get singleRecord(): Record<string|number, unknown> | null
+    {
+        return this._data[BaseApiResponse.FIELD_SINGLE_RECORD] as Record<string|number, unknown> | null;
     }
 
     /**

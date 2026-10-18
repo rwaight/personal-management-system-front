@@ -13,7 +13,7 @@
               :no-background="true"
               padding-bottom="0"
               id="illnessesViewEditModal"
-              @close-modal="$emit('modalClosed', $event)"
+              @submit="onTabSubmit"
               @files-saved="$emit('filesSaved')"
         />
 
@@ -34,12 +34,15 @@ import {ComponentData} from "@/scripts/Vue/Types/Components/types";
 
 import {DoctorAppointmentStore} from "@/scripts/Vue/Store/Module/Health/AppointmentStore";
 
+import BaseError from "@/scripts/Core/Error/BaseError";
+
 export default {
   data(): ComponentData {
     return {
       doctorAppointmentStore: null,
       initialSmallSizeModal: "medium",
       showModal: false,
+      usedIllness: null as Record<string, unknown> | null,
     }
   },
   props: {
@@ -71,12 +74,12 @@ export default {
      */
     tabsContent(): Array<Record<string, unknown>> {
       let tabs = [];
-      if (this?.illness?.id) {
+      if (this?.usedIllness?.id) {
         tabs.push({
           tabName: this.$t('health.overview.tabs.subTabs.tabs.files.header.label'),
           tabComponent: TabFiles,
           tabComponentProps: {
-            illness: this.illness,
+            illness: this.usedIllness,
           }
         })
       }
@@ -85,16 +88,16 @@ export default {
         tabName: this.$t('health.overview.tabs.subTabs.tabs.illness.header.label'),
         tabComponent: TabIllness,
         tabComponentProps: {
-          illness: this.illness,
+          illness: this.usedIllness,
         }
       })
 
-      if (this?.illness?.id) {
+      if (this?.usedIllness?.id) {
         tabs.push({
           tabName: this.$t('health.overview.tabs.subTabs.tabs.appointments.header.label'),
           tabComponent: TabAppointments,
           tabComponentProps: {
-            illness: this.illness,
+            illness: this.usedIllness,
           }
         })
       }
@@ -103,6 +106,22 @@ export default {
     }
   },
   methods: {
+    /**
+     * @description this is needed explicitly for "create" mode. Initially, when the modal is opened, we show only the
+     *              "Illness" tab. With this code, when a user submits a new entry, we instantly show other tabs too.
+     */
+    onTabSubmit(data): void {
+      if (!data) {
+        this.$emit('modalClosed');
+        return;
+      }
+
+      if (!data.singleRecord) {
+        throw new BaseError("Illness (singleRecord) is missing in the data object");
+      }
+
+      this.usedIllness = data.singleRecord;
+    },
     /**
      * @description handles the situation when modal get closed. Will pass the event further
      */
@@ -113,8 +132,12 @@ export default {
   created(): void {
     this.doctorAppointmentStore = DoctorAppointmentStore();
     this.doctorAppointmentStore.getAll();
+    this.usedIllness = this.illness;
   },
   watch: {
+    illness() : void {
+      this.usedIllness = this.illness;
+    },
     isModalVisible() {
       this.showModal = this.isModalVisible;
     }
