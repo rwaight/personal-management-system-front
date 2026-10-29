@@ -153,10 +153,6 @@ export default {
       throw new BaseError("Either `configurationId` must be supplied or `isFolderSelectVisible=true` must be set");
     }
 
-    if (!this.extraData.uploadDir && !this.isFolderSelectVisible) {
-      throw new BaseError("Either `extraData.uploadDir` must be supplied or `isFolderSelectVisible=true` must be set");
-    }
-
     this.upload.configurationId = this.configurationId;
     this.upload.extraData = this.extraData;
   },
