@@ -107,6 +107,9 @@
                     "text": {
                         "averageSavingMonth": {
                             "label": "Average saving each month"
+                        },
+                        "totalSaving": {
+                            "label": "Total saving"
                         }
                     },
                     "header": "Saving each month",

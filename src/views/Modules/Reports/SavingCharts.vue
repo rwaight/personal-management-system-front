@@ -36,6 +36,7 @@
       ></canvas>
 
       <h2 class="text-lg">{{ $t('reports.saving.eachMonth.chart.text.averageSavingMonth.label') }}: {{ avgSaving }}</h2>
+      <h2 class="text-lg">{{ $t('reports.saving.eachMonth.chart.text.totalSaving.label') }}: {{ totalSaving }}</h2>
     </div>
 
   </Base>
@@ -77,6 +78,12 @@ export default {
      * @description average saving per month
      */
     avgSaving(): number {
+      return (this.totalSaving / this.values.length).toFixed(2);
+    },
+    /**
+     * @description total saving in the selected period
+     */
+    totalSaving(): number {
       if (this.values.length === 0) {
         return 0;
       }
@@ -86,7 +93,7 @@ export default {
         sum += value;
       }
 
-      return (sum / this.values.length).toFixed(2);
+      return sum;
     },
     /**
      * @description x axis values
